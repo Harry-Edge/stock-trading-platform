@@ -1,0 +1,6 @@
+venv
+data
+.pytest_cache
+media
+.sqlite3
+.idea

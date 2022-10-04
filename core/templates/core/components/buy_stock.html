@@ -1,0 +1,68 @@
+<div class="modal fade" id="buy{{ stock.name }}StockModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Buy {{ stock.name }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="p-3 d-flex justify-content-center">
+            <h2 class="fw-bold" name="{{ stock.id }}-buy-price">£{{ stock.get_latest_price }}</h2>
+        </div>
+        <div class="container">
+            <hr/>
+            <div class="mt-2">
+                <h6 class="fw-bold d-flex justify-content-center">Number of shares</h6>
+                <h1 class="text-primary d-flex justify-content-center" id="{{ stock.id }}-stock-quantity">0</h1>
+                <h6 class="text-muted d-flex justify-content-center" id="{{ stock.id}}-order-amount">~£0</h6>
+            </div>
+            <input type="range" class="mt-2 form-range" value="0" min="0" max="10" step="1" id="{{ stock.id }}-stock-quantity-to-buy-input">
+            <div class="bg-light mt-3 p-3 text-center text-muted">
+                Market orders are executed at the best currently available market prices
+            </div>
+            <script type="text/javascript">
+                    document.getElementById("{{ stock.id }}-stock-quantity-to-buy-input").addEventListener("input", function() {
+                    document.getElementById("{{ stock.id }}-stock-quantity").innerHTML = this.value;
+                    document.getElementById("{{ stock.id }}-order-amount").innerHTML = "~£" + (this.value * document.getElementsByName("{{ stock.id }}-buy-price")[0].innerHTML.replace("£", ""));
+                });
+            </script>
+        </div>
+      </div>
+      <div class="modal-footer" >
+          <div class="spinner-border me-2 d-none" role="status" id="{{ stock.id }}-buying-stock-spinner">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+        <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal" id="{{ stock.id }}-close-buy">Close</button>
+        <button type="button" class="btn btn-primary fw-bold" onclick="sendBuyOrder{{ stock.id }}()" id="{{ stock.id }}-buy-stock">Send Buy Order</button>
+        <script type="text/javascript">
+             function sendBuyOrder{{ stock.id }}(){
+                    document.getElementById("{{ stock.id }}-buying-stock-spinner").classList.remove("d-none");
+                    document.getElementById("{{ stock.id }}-close-buy").disabled = true;
+                    document.getElementById("{{ stock.id }}-buy-stock").disabled = true;
+                    const stockId = {{ stock.id }};
+                    const quantity = document.getElementById("{{ stock.id }}-stock-quantity-to-buy-input").value;
+                    const url = "{% url 'stock-order' %}";
+                    const data = {
+                        'stock_id': stockId,
+                        'quantity': quantity,
+                        'user_id': {{ request.user.id }},
+                        'order_type': 'buy'
+                    };
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        data: data,
+                        headers: {
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        },
+                        success: function(data) {
+                            console.log(data);
+                            location.reload();
+                        }
+                    });
+             }
+        </script>
+      </div>
+    </div>
+  </div>
+</div>

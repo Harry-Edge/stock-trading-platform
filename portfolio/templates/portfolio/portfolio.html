@@ -1,0 +1,82 @@
+{% extends 'core/base.html' %}
+{% load dashboard_tags %}
+{% block content %}
+    {% if portfolio.stocks_owned %}
+        <div class="col-4">
+            <div class="bg-white border border-secondary border-2 border-opacity-25">
+                <div class="p-4">
+                    <h3 class="mb-2 pb-2">£{{ portfolio.total_portfolio_value }}</h3>
+                    <div class="row mt-2">
+                        <div class="col-3">
+                            <h6 class="text-muted">INVESTED</h6>
+                            <h6 class="fw-bold" id="portfolio-total-invested">{{ portfolio.total_invested }}</h6>
+                        </div>
+                        <div class="col-9">
+                            <h6 class="text-muted">RETURN</h6>
+                            <h6 class="fw-bold" id="portfolio-total-return">{{ portfolio.current_portfolio_return}}</h6>
+                        </div>
+                        <script>
+                            const portfolio_total_invested = document.getElementById("portfolio-total-invested");
+                            const portfolio_total_return = document.getElementById("portfolio-total-return");
+                            let portfolio_total_return_percentage = portfolio_total_return.innerText / portfolio_total_invested.innerText;
+                            portfolio_total_return_percentage = portfolio_total_return_percentage * 100;
+                            portfolio_total_return_percentage = portfolio_total_return_percentage.toFixed(2);
+
+                            if (portfolio_total_return_percentage > 0) {
+                                portfolio_total_return.classList.add("text-success");
+                                portfolio_total_return.innerText = `+${portfolio_total_return.innerHTML} (${portfolio_total_return_percentage}%)`;
+                            } else {
+                                portfolio_total_return.classList.add("text-danger");
+                                portfolio_total_return.innerText = `${portfolio_total_return.innerHTML} (${portfolio_total_return_percentage}%)`;
+                            }
+                        </script>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-2 bg-white border border-secondary border-2 border-opacity-25">
+                <div class="mt-2 mb-2">
+                    {% for stock in stocks_owned %}
+                        <div class="ps-2 pe-2 {% if forloop.counter0 == 0 %}bg-light border-start border-primary border-5 {% endif %}" id="select-stock-{{ forloop.counter0 }}" onclick="changeCurrentStock({{ forloop.counter0 }})" >
+                            <div class="p-3 border-top border-bottom">
+                                <div class="row pb-1 pt-1">
+                                    <div class="col-2 d-flex  align-items-cente">
+                                        <img src="{{ stock.stock.logo.url }}" class="rounded " height="35px" width="35px" alt="logo">
+                                    </div>
+                                    <div class="col-6 d-flex align-items-center">
+                                        <h5 class="text-muted ">{{ stock.stock.name }}</h5>
+                                    </div>
+                                    <div class="col-4 d-flex justify-content-end align-items-center">
+                                        <h5 class="float-end text-success" id="{{ stock.stock.id }}-element" name="{{ stock.stock.id }}-buy-price">£{{ stock.stock.get_latest_price }}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-7">
+             {% for stock in stocks_owned %}
+                 {% with stock=stock.stock %}
+                <div id="stock-detailed-{{ forloop.counter0 }}" class="{% if not forloop.counter0 == 0 %}d-none{% endif %}">
+                    {% get_return_investment_for_user_if_applicable stock request.user as investment %}
+                    {% include 'core/components/ticker_detail_view.html' with investment=investment %}
+                    {% if investment %}
+                        {% include 'core/components/stock_investment_view.html' with investment=investment %}
+                    {% endif %}
+                    {% include 'core/components/instrument_details_view.html' %}
+                </div>
+                {% endwith %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="col-12">
+            <div class="d-flex justify-content-center">
+                <div>
+                    <h3 class="text-center">You don't have any stocks yet!</h3>
+                    <p class="text-center">Click <a href="{% url 'dashboard' %}">here</a> to buy some!</p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock content %}

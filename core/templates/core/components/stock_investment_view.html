@@ -1,0 +1,29 @@
+<div class="mt-3 bg-white border border-secondary border-2 border-opacity-25">
+    <div class="p-3">
+        <h5 class="text-muted">Your Investment</h5>
+        <div class="d-flex justify-content-between">
+            <h6 class="fw-bold">{{ investment.quantity }} {% if investment.quantity == 1 %}Share{% else %}Shares{% endif %}</h6>
+            <h6 class="fw-bold">£{{ investment.total_value_of_investment }}</h6>
+        </div>
+        <hr/>
+        <div class="row">
+            <div class="col-3">
+                <h6 class="text-muted">Average Price</h6>
+                <h6 class="fw-bold">£{{ investment.average_price }}</h6>
+            </div>
+            <div class="col-7">
+                <h6 class="text-muted">Sell Price</h6>
+                <h6 class="fw-bold">£{{ stock.get_latest_price }}</h6>
+            </div>
+            <div class="col-2 d-flex justify-content-end">
+                <div>
+                    <h6 class="text-muted">Return</h6>
+                    <h6 class="fw-bold text-success" id="{{ stock.id }}-current-return-percentage">+3.54%</h6>
+                    <script type="text/javascript">
+                        document.getElementById('{{ stock.id }}-current-return-percentage').innerHTML = ((({{ stock.get_latest_price }} - {{ investment.average_price }}) / {{ investment.average_price }}) * 100).toFixed(2) + '%';
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

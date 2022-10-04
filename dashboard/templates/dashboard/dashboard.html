@@ -1,0 +1,51 @@
+{% extends 'core/base.html' %}
+{% block content %}
+{% load dashboard_tags %}
+<div class="col-2">
+    <div class="list-group list-group-flush">
+      <button type="button" class="list-group-item list-group-item-action active" aria-current="true">
+        My Watchlist
+      </button>
+      <button type="button" class="list-group-item list-group-item-action">Top Winners</button>
+      <button type="button" class="list-group-item list-group-item-action">Top Losers</button>
+    </div>
+</div>
+<div class="col-3">
+    <div class="bg-white border border-secondary border-2 border-opacity-25">
+        <div class="mt-2 mb-2">
+            {% for stock in stocks %}
+                <div class="ps-2 pe-2 {% if forloop.counter0 == 0 %}bg-light border-start border-primary border-5 {% endif %}" id="select-stock-{{ forloop.counter0 }}" onclick="changeCurrentStock({{ forloop.counter0 }})" >
+                    <div class="p-3 border-top border-bottom">
+                        <div class="row pb-1 pt-1">
+                            <div class="col-2 d-flex  align-items-cente">
+                                <img src="{{ stock.logo.url }}" class="rounded " height="35px" width="35px" alt="logo">
+                            </div>
+                            <div class="col-6 d-flex align-items-center">
+                                <h5 class="text-muted ">{{ stock.name }}</h5>
+                            </div>
+                            <div class="col-4 d-flex justify-content-end align-items-center">
+                                <h5 class="float-end text-success" id="{{ stock.id }}-element" name="{{ stock.id }}-buy-price">£{{ stock.get_latest_price }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<div class="col-6">
+    {% for stock in stocks %}
+        <div id="stock-detailed-{{ forloop.counter0 }}" class="{% if not forloop.counter0 == 0 %}d-none{% endif %}">
+            {% get_return_investment_for_user_if_applicable stock request.user as investment %}
+            {% include 'core/components/ticker_detail_view.html' with investment=investment %}
+            {% if investment %}
+                {% include 'core/components/stock_investment_view.html' with investment=investment %}
+            {% endif %}
+            {% include 'core/components/instrument_details_view.html' %}
+        </div>
+    {% endfor %}
+</div>
+<script type="text/javascript">
+
+</script>
+{% endblock content %}

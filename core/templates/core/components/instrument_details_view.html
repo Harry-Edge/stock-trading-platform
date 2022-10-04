@@ -1,0 +1,30 @@
+<div class="mt-3 bg-white border border-secondary border-2 border-opacity-25">
+    <div class="p-3">
+        <h5 class="text-muted">Instrument Details</h5>
+        <hr/>
+        <div class="d-flex justify-content-between">
+            <h6 class="text-muted">Name</h6>
+            <h6 class="text-muted">{{ stock.name }}</h6>
+        </div>
+        <hr/>
+        <div class="d-flex justify-content-between">
+            <h6 class="text-muted">Market Name</h6>
+            <h6 class="text-muted">{{ stock.exchange.name }}</h6>
+        </div>
+        <hr/>
+        <div class="d-flex justify-content-between">
+            <h6 class="text-muted">Currency</h6>
+            <h6 class="text-muted">{{ stock.exchange.currency }}</h6>
+        </div>
+        <hr/>
+        <div class="d-flex justify-content-between">
+            <h6 class="text-muted">Sell Price</h6>
+            <h6 class="text-muted">{{ stock.get_latest_price }}</h6>
+        </div>
+        <hr/>
+        <div class="d-flex justify-content-between">
+            <h6 class="text-muted">Buy Price</h6>
+            <h6 class="text-muted">{{ stock.get_latest_price }}</h6>
+        </div>
+    </div>
+</div>

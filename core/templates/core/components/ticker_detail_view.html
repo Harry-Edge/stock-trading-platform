@@ -1,0 +1,46 @@
+{% load static %}
+<div class="bg-white border border-secondary border-2 border-opacity-25">
+    <div class="p-4">
+        <div class="row">
+            <div class="col-2">
+                <img src="{{ stock.logo.url }}" class="rounded" alt="logo" width="70" height="70">
+            </div>
+            <div class="col-6 d-flex align-items-center">
+                <div>
+                    <h4 class="">{{ stock.name }}</h4>
+                    <small class="text-muted">{{ stock.exchange.name }} - STOCK - {{ stock.exchange.country }}</small>
+                </div>
+            </div>
+            <div class="col-4 d-flex justify-content-end align-items-center">
+                 <div class="">
+                     <h4 class="float-end" name="{{ stock.id }}-buy-price" >£{{ stock.get_latest_price }}</h4>
+                     <small class=" float-end text-success fw-bold">+£1.05 (+0.38%)</small>
+                 </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-4">
+                <div class="row">
+                    {% if investment %}
+                    <div class="col-6">
+                        <button class="btn btn-primary w-100 btn-sm fw-bold" data-bs-toggle="modal" data-bs-target="#sell{{ stock.name }}StockModal"><small>SELL</small></button>
+                    </div>
+                    {% endif %}
+                    <div class="col-6">
+                        <button class="btn btn-primary w-100 btn-sm fw-bold" data-bs-toggle="modal" data-bs-target="#buy{{ stock.name }}StockModal"><small>BUY</small></button>
+                        <!-- BuyStockModal -->
+                        {% include 'core/components/buy_stock.html' %}
+                        {% include 'core/components/sell_stock.html' %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-5"></div>
+            <div class="col-3">
+                <div class="bg-light h-100 fw-bold rounded-pill d-flex justify-content-center align-items-center"><small class="text-muted">MARKET</small><small class="ms-1 text-primary"> OPEN</small></div>
+            </div>
+        </div>
+    </div>
+    <div class="pb-4 pt-4">
+
+    </div>
+</div>
