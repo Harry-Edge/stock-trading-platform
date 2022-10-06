@@ -150,7 +150,8 @@ class ReturnPortfolio(APIView):
     Return the portfolio for the user
     """
 
-    def get(self, request, user_id) -> Response:
+    @staticmethod
+    def get(request, user_id) -> Response:
         portfolio = Portfolio.objects.filter(user_id=user_id)
 
         if portfolio.exists():
