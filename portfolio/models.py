@@ -4,6 +4,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from core.models import Stock
 from core.models import StockOrderHistory
+# import decimal
+from decimal import Decimal
 
 
 class Portfolio(models.Model):
@@ -27,18 +29,19 @@ class Portfolio(models.Model):
         total_portfolio_value = 0
         for stock in self.stocksowned_set.all():
             total_portfolio_value += stock.total_value_of_investment
-        return total_portfolio_value
+
+        return round(total_portfolio_value, 2)
 
     @property
     def total_account_value(self) -> float:
-        return self.total_portfolio_value + float(self.free_cash)
+        return round((self.total_portfolio_value + float(self.free_cash)), 2)
 
     @property
     def current_portfolio_return(self):
         total_portfolio_return = 0
         for stock in self.stocksowned_set.all():
             total_portfolio_return += stock.stock.get_latest_price() * stock.quantity
-        return total_portfolio_return
+        return round(total_portfolio_return, 2)
 
     @property
     def total_invested(self) -> float:
