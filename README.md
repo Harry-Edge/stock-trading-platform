@@ -9,3 +9,5 @@ Basic platform for buying and selling stocks along with a portfolio tracker.
  - View the current stock price
 
 Features full testing and Docker environment set up 
+
+git test
