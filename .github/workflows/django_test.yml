@@ -13,6 +13,7 @@ jobs:
       postgres:
         image: postgres:latest
         env:
+          POSTGRES_NAME: postgres
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: postgres
@@ -30,6 +31,10 @@ jobs:
       - name: Install dependencies
         run:
           pip install -r requirements.txt
+      - Run Migrations
+        run:
+          python manage.py makemigrations
+          python manage.py migrate
       - name: Run tests
         run:
           python manage.py test
