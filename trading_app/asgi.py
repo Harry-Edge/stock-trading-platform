@@ -16,7 +16,7 @@ from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
 import dashboard.routing
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'trading_app.settings')
+# os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'trading_app.settings.dev')
 
 django.setup()
 
