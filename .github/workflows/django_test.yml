@@ -40,7 +40,7 @@ jobs:
           pip install -r requirements.txt
       - name: Migrate
         run:
-            python manage.py migrate
+            python manage.py migrate --settings=trading_app.settings.dev
       - name: Run tests
         run:
-          python manage.py test
+          python manage.py test --settings=trading_app.settings.dev
